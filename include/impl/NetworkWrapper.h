@@ -22,24 +22,18 @@ using error_code = boost::system::error_code;
 
 namespace Strava
 {
-	class SslContextSingleton : public boost::noncopyable
-	{
-	public:
-		static SslContextSingleton& Instance();
-
-	private:
-		SslContextSingleton();
-	};
+	using HeaderItem = std::pair<http::field, std::string>;
+	using HeaderVector = std::vector<HeaderItem>;
 
 	class NetworkWrapper : public boost::noncopyable
 	{
 	public:
-		NetworkWrapper(const std::string& host, net::io_context& ioc);
+		NetworkWrapper(const std::string& host);
 		~NetworkWrapper();
 
 		bool Initialize();
 
-		bool SendRequest(http::verb reqType, const std::string& path, const std::vector<std::pair<http::field, std::string>>& header, unsigned int& status, json::value& response);
+		bool SendRequest(http::verb reqType, const std::string& path, const HeaderVector& header, const json::object& body, unsigned int& status, json::value& response);
 
 	private:
 		bool ConnectIfNeeded();
@@ -52,7 +46,7 @@ namespace Strava
 	private:
 		bool m_initialized;
 
-		net::io_context& m_ioc;
+		net::io_context m_ioc;
 		ssl::context m_sslContext;
 
 		const std::string m_host;

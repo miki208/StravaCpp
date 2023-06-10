@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\impl">
+      <UniqueIdentifier>{96cb6f4f-f0c0-4caa-a0fe-95f8258f41c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActivityEndpoint.cpp">
@@ -24,10 +27,19 @@
     <ClCompile Include="APIFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkWrapper.cpp">
+    <ClCompile Include="ResultSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResultSet.cpp">
+    <ClCompile Include="AuthenticatedAthlete.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AuthenticatedAPIAccessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEndpoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,11 +56,20 @@
     <ClInclude Include="include\APIInterfaces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\NetworkWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\ResultSet.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AuthenticatedAthlete.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AuthenticatedAPIAccessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\impl\BaseEndpoint.h">
+      <Filter>Header Files\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\impl\NetworkWrapper.h">
+      <Filter>Header Files\impl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

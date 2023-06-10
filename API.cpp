@@ -1,9 +1,15 @@
 #include "API.h"
 
+#include "impl/NetworkWrapper.h"
+
 namespace Strava
 {
-	API::API(net::io_context& ioc, const std::string& accessToken) : cStravaHostName("www.strava.com"), cRootEndpoint("/api/v3"), m_apiContext(cStravaHostName, ioc), m_initialized(false),
-		m_activityEndpoint(*this), m_accessToken(accessToken)
+	API::API() : cStravaHostName("www.strava.com"), cRootEndpoint("/api/v3"), m_pNetworkWrapper(std::make_unique<NetworkWrapper>(cStravaHostName)), m_initialized(false)
+	{
+
+	}
+
+	API::~API()
 	{
 
 	}
@@ -13,7 +19,7 @@ namespace Strava
 		if (m_initialized)
 			return true;
 
-		m_initialized = m_apiContext.Initialize();
+		m_initialized = m_pNetworkWrapper->Initialize();
 
 		return m_initialized;
 	}
@@ -23,12 +29,12 @@ namespace Strava
 		return m_initialized;
 	}
 	
-	ActivityEndpoint& API::Activities()
+	AuthenticatedAPIAccessor API::GetApiAccessor(const AuthenticatedAthlete& athlete)
 	{
 		if(!IsInitialized())
 			Initialize();
 
-		return m_activityEndpoint;
+		return AuthenticatedAPIAccessor(shared_from_this(), athlete);
 	}
 
 	std::string API::GetApiHostName() const
@@ -41,13 +47,8 @@ namespace Strava
 		return cRootEndpoint;
 	}
 
-	std::string API::GetAccessToken() const
-	{
-		return m_accessToken;
-	}
-
 	NetworkWrapper& API::GetNetworkWrapper()
 	{
-		return m_apiContext;
+		return *m_pNetworkWrapper;
 	}
 }

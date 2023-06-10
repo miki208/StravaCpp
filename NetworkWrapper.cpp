@@ -1,4 +1,4 @@
-#include "NetworkWrapper.h"
+#include "impl/NetworkWrapper.h"
 
 #include "boost/beast/version.hpp"
 #include "boost/certify/extensions.hpp"
@@ -6,8 +6,8 @@
 
 namespace Strava
 {
-	NetworkWrapper::NetworkWrapper(const std::string& host, net::io_context& ioc) :
-		m_host(host), m_ioc(ioc), m_sslContext(ssl::context::tlsv12_client), m_initialized(false)
+	NetworkWrapper::NetworkWrapper(const std::string& host) :
+		m_host(host), m_sslContext(ssl::context::tlsv12_client), m_initialized(false)
 	{
 
 	}
@@ -48,14 +48,54 @@ namespace Strava
 		return m_initialized;
 	}
 
-	bool NetworkWrapper::SendRequest(http::verb reqType, const std::string& path, const std::vector<std::pair<http::field, std::string>>& header, unsigned int& status, boost::json::value& response)
+	bool NetworkWrapper::SendRequest(http::verb reqType, const std::string& path, const HeaderVector& header, const json::object& body, unsigned int& status, boost::json::value& response)
 	{
 		if (!ConnectIfNeeded())
 			return false;
 
 		error_code ec;
+		http::request<http::string_body> req;
 
-		http::request<http::string_body> req(http::verb::get, path, 11);
+		req.version(11);
+		req.method(reqType);
+
+		if (reqType == http::verb::get)
+		{
+			std::stringstream pathAndQuery;
+			pathAndQuery << path;
+
+			bool isFirst = true;
+			for (const auto& item : body)
+			{
+				const auto key = item.key();
+				const auto& value = item.value();
+
+				if (value.is_primitive())
+				{
+					if (isFirst)
+					{
+						isFirst = false;
+
+						pathAndQuery << '?';
+					}
+					else
+					{
+						pathAndQuery << '&';
+					}
+
+					pathAndQuery << key << '=' << value;
+				}
+			}
+
+			req.target(pathAndQuery.str());
+		}
+		else if (reqType == http::verb::post || reqType == http::verb::put)
+		{
+			req.target(path);
+
+			req.body() = json::serialize(body);
+		}
+
 		BootstrapRequest(req);
 
 		//--- set header
@@ -179,17 +219,4 @@ namespace Strava
 
 		return contentType.substr(0, delimiterPos);
 	}
-
-	SslContextSingleton& SslContextSingleton::Instance()
-	{
-		static SslContextSingleton instance;
-
-		return instance;
-	}
-
-	SslContextSingleton::SslContextSingleton()
-	{
-
-	}
-
 }

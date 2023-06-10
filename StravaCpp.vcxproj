@@ -22,6 +22,9 @@
     <ClCompile Include="ActivityEndpoint.cpp" />
     <ClCompile Include="API.cpp" />
     <ClCompile Include="APIFactory.cpp" />
+    <ClCompile Include="AuthenticatedAPIAccessor.cpp" />
+    <ClCompile Include="AuthenticatedAthlete.cpp" />
+    <ClCompile Include="BaseEndpoint.cpp" />
     <ClCompile Include="NetworkWrapper.cpp" />
     <ClCompile Include="ResultSet.cpp" />
   </ItemGroup>
@@ -30,7 +33,10 @@
     <ClInclude Include="include\API.h" />
     <ClInclude Include="include\APIFactory.h" />
     <ClInclude Include="include\APIInterfaces.h" />
-    <ClInclude Include="include\NetworkWrapper.h" />
+    <ClInclude Include="include\AuthenticatedAPIAccessor.h" />
+    <ClInclude Include="include\AuthenticatedAthlete.h" />
+    <ClInclude Include="include\impl\BaseEndpoint.h" />
+    <ClInclude Include="include\impl\NetworkWrapper.h" />
     <ClInclude Include="include\ResultSet.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

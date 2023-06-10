@@ -1,22 +1,31 @@
 #pragma once
 
 #include <functional>
+#include <string>
 
 #include "boost/json.hpp"
+
+namespace json = boost::json;
 
 namespace Strava
 {
 	class ResultSet
 	{
 	public:
-		ResultSet(const boost::json::object& obj);
-		ResultSet(boost::json::object&& obj);
+		ResultSet(const json::value& obj, unsigned int status);
+		ResultSet(json::value&& obj, unsigned int status);
 
-		const boost::json::value& Get(const std::string& path) const;
-		bool ForEach(const std::string& path, const std::function<void(const boost::json::value&)>& callback) const;
+		const json::value& Get(const std::string& path) const;
+		bool ForEach(const std::string& path, const std::function<void(const json::value&)>& callback) const;
+
+		unsigned int GetStatus() const;
+
+		friend std::ostream& operator<<(std::ostream& os, const ResultSet& rs);
 
 	protected:
-		boost::json::value m_jsonResult;
-		boost::json::value m_nullValue;
+		const json::value m_jsonResult;
+		unsigned int m_status;
+		
+		static const json::value s_cNullValue;
 	};
 }

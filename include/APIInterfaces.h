@@ -1,26 +1,27 @@
 #pragma once
 
-#include <string>
+#include "AuthenticatedAPIAccessor.h"
+#include "AuthenticatedAthlete.h"
 
-#include "ActivityEndpoint.h"
-#include "NetworkWrapper.h"
+#include <string>
 
 namespace Strava
 {
-	class IEndpointProvider
+	class NetworkWrapper;
+
+	class IAPIPublicInterface
 	{
 	public:
-		virtual ActivityEndpoint& Activities() = 0;
+		virtual AuthenticatedAPIAccessor GetApiAccessor(const AuthenticatedAthlete& athlete) = 0;
 	};
 
-	class IAPICore
+	class IAPIInternalInterface
 	{
 	public:
 		virtual bool IsInitialized() const = 0;
 
 		virtual std::string GetApiHostName() const = 0;
 		virtual std::string GetRootEndpoint() const = 0;
-		virtual std::string GetAccessToken() const = 0;
 
 		virtual NetworkWrapper& GetNetworkWrapper() = 0;
 	};

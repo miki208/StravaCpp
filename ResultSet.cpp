@@ -2,29 +2,35 @@
 
 namespace Strava
 {
-	ResultSet::ResultSet(const boost::json::object& obj) : m_jsonResult(obj)
+	const json::value ResultSet::s_cNullValue(nullptr);
+
+	ResultSet::ResultSet(const json::value& obj, unsigned int status) :
+		m_jsonResult(obj),
+		m_status(status)
 	{
 
 	}
 
-	ResultSet::ResultSet(boost::json::object&& obj) : m_jsonResult(std::move(obj))
+	ResultSet::ResultSet(json::value&& obj, unsigned int status) :
+		m_jsonResult(std::move(obj)),
+		m_status(status)
 	{
 
 	}
 
-	const boost::json::value& ResultSet::Get(const std::string& path) const
+	const json::value& ResultSet::Get(const std::string& path) const
 	{
-		boost::json::error_code ec;
+		json::error_code ec;
 
-		const boost::json::value* result = m_jsonResult.find_pointer(path, ec);
+		const json::value* result = m_jsonResult.find_pointer(path, ec);
 
 		if (ec)
-			return m_nullValue;
+			return s_cNullValue;
 		else
 			return *result;
 	}
 
-	bool ResultSet::ForEach(const std::string& path, const std::function<void(const boost::json::value&)>& callback) const
+	bool ResultSet::ForEach(const std::string& path, const std::function<void(const json::value&)>& callback) const
 	{
 		const auto& result = Get(path);
 
@@ -39,5 +45,20 @@ namespace Strava
 		}
 
 		return false;
+	}
+
+	unsigned int ResultSet::GetStatus() const
+	{
+		return m_status;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const ResultSet& rs)
+	{
+		os << "Status: " << rs.m_status << std::endl;
+
+		if (rs.m_jsonResult != ResultSet::s_cNullValue)
+			os << "Response: " << std::endl << rs.m_jsonResult;
+
+		return os;
 	}
 }
