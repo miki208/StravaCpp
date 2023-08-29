@@ -10,6 +10,11 @@
 
 namespace Strava
 {
+	namespace Async
+	{
+		class ServerNetworkWrapper;
+	}
+
 	class API : public boost::noncopyable, public IAPIPublicInterface, public IAPIInternalInterface, public std::enable_shared_from_this<API>
 	{
 	public:
@@ -22,10 +27,13 @@ namespace Strava
 		std::string GetApiHostName() const override;
 		std::string GetRootEndpoint() const override;
 
-		NetworkWrapper& GetNetworkWrapper() override;
+		int GetClientId() const override;
+		std::string GetClientSecret() const override;
+
+		ClientNetworkWrapper& GetClientNetworkWrapper() override;
 
 	private:
-		API();
+		API(int clientId, const std::string& clientSecret, std::string serverInterface = "", uint16_t serverPort = 0, std::string certFile = "", std::string pkFile = "", std::string pkPasshphrase = "");
 
 		bool Initialize();
 
@@ -33,9 +41,19 @@ namespace Strava
 		const std::string cStravaHostName;
 		const std::string cRootEndpoint;
 
+		const int m_clientId;
+		const std::string m_clientSecret;
+
 		bool m_initialized;
 
-		std::unique_ptr<NetworkWrapper> m_pNetworkWrapper;
+		std::unique_ptr<ClientNetworkWrapper> m_pClientNetworkWrapper;
+		std::unique_ptr<Async::ServerNetworkWrapper> m_pServerNetworkWrapper;
+
+		std::string m_serverInterface;
+		uint16_t m_serverPort;
+		std::string m_certFile;
+		std::string m_pkFile;
+		std::string m_pkPassphrase;
 
 	private:
 		friend class APIFactory;

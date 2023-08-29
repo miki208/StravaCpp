@@ -7,7 +7,7 @@
 
 namespace Strava
 {
-	class NetworkWrapper;
+	class ClientNetworkWrapper;
 
 	class IAPIPublicInterface
 	{
@@ -22,7 +22,10 @@ namespace Strava
 
 		virtual std::string GetApiHostName() const = 0;
 		virtual std::string GetRootEndpoint() const = 0;
+		
+		virtual int GetClientId() const = 0;
+		virtual std::string GetClientSecret() const = 0;
 
-		virtual NetworkWrapper& GetNetworkWrapper() = 0;
+		virtual ClientNetworkWrapper& GetClientNetworkWrapper() = 0;
 	};
 }

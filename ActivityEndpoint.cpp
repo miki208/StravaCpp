@@ -4,8 +4,8 @@
 
 namespace Strava
 {
-	ActivityEndpoint::ActivityEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete) :
-		BaseEndpoint(pApiInternal, athlete)
+	ActivityEndpoint::ActivityEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete, const std::function<void(const AuthenticatedAthlete&)>& onAuthenticatedAthleteUpdatedCb) :
+		BaseEndpoint(pApiInternal, athlete, onAuthenticatedAthleteUpdatedCb)
 	{
 
 	}

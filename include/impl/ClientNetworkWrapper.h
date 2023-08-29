@@ -25,11 +25,11 @@ namespace Strava
 	using HeaderItem = std::pair<http::field, std::string>;
 	using HeaderVector = std::vector<HeaderItem>;
 
-	class NetworkWrapper : public boost::noncopyable
+	class ClientNetworkWrapper : public boost::noncopyable
 	{
 	public:
-		NetworkWrapper(const std::string& host);
-		~NetworkWrapper();
+		ClientNetworkWrapper(const std::string& host);
+		~ClientNetworkWrapper();
 
 		bool Initialize();
 

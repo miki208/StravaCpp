@@ -15,9 +15,9 @@ namespace Strava
 		std::string refresh_token() const;
 
 	private:
-		const std::string m_accessToken;
-		const uint64_t m_expiresAt;
+		std::string m_accessToken;
+		uint64_t m_expiresAt;
 
-		const std::string m_refreshToken;
+		std::string m_refreshToken;
 	};
 }

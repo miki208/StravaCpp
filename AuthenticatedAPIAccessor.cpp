@@ -18,6 +18,6 @@ namespace Strava
 
 	ActivityEndpoint AuthenticatedAPIAccessor::Activity()
 	{
-		return ActivityEndpoint(m_pApiInternal, m_athlete);
+		return ActivityEndpoint(m_pApiInternal, m_athlete, m_onAuthenticatedAthleteUpdatedCb);
 	}
 }

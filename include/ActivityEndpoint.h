@@ -64,7 +64,7 @@ namespace Strava
 		ResultSet Zones(uint64_t id);
 
 	private:
-		ActivityEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete);
+		ActivityEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete, const std::function<void(const AuthenticatedAthlete&)>& onAuthenticatedAthleteUpdatedCb);
 
 	private:
 		friend class AuthenticatedAPIAccessor;

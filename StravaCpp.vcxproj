@@ -25,8 +25,9 @@
     <ClCompile Include="AuthenticatedAPIAccessor.cpp" />
     <ClCompile Include="AuthenticatedAthlete.cpp" />
     <ClCompile Include="BaseEndpoint.cpp" />
-    <ClCompile Include="NetworkWrapper.cpp" />
+    <ClCompile Include="ClientNetworkWrapper.cpp" />
     <ClCompile Include="ResultSet.cpp" />
+    <ClCompile Include="ServerNetworkWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ActivityEndpoint.h" />
@@ -36,7 +37,8 @@
     <ClInclude Include="include\AuthenticatedAPIAccessor.h" />
     <ClInclude Include="include\AuthenticatedAthlete.h" />
     <ClInclude Include="include\impl\BaseEndpoint.h" />
-    <ClInclude Include="include\impl\NetworkWrapper.h" />
+    <ClInclude Include="include\impl\ClientNetworkWrapper.h" />
+    <ClInclude Include="include\impl\ServerNetworkWrapper.h" />
     <ClInclude Include="include\ResultSet.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -168,6 +170,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>D:\Libraries\OpenSSL\include;D:\Libraries\boost;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>

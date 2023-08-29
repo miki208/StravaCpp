@@ -1,4 +1,4 @@
-#include "impl/NetworkWrapper.h"
+#include "impl/ClientNetworkWrapper.h"
 
 #include "boost/beast/version.hpp"
 #include "boost/certify/extensions.hpp"
@@ -6,18 +6,18 @@
 
 namespace Strava
 {
-	NetworkWrapper::NetworkWrapper(const std::string& host) :
+	ClientNetworkWrapper::ClientNetworkWrapper(const std::string& host) :
 		m_host(host), m_sslContext(ssl::context::tlsv12_client), m_initialized(false)
 	{
 
 	}
 
-	NetworkWrapper::~NetworkWrapper()
+	ClientNetworkWrapper::~ClientNetworkWrapper()
 	{
 		DisconnectIfNeeded();
 	}
 
-	bool NetworkWrapper::Initialize()
+	bool ClientNetworkWrapper::Initialize()
 	{
 		error_code ec;
 
@@ -48,7 +48,7 @@ namespace Strava
 		return m_initialized;
 	}
 
-	bool NetworkWrapper::SendRequest(http::verb reqType, const std::string& path, const HeaderVector& header, const json::object& body, unsigned int& status, boost::json::value& response)
+	bool ClientNetworkWrapper::SendRequest(http::verb reqType, const std::string& path, const HeaderVector& header, const json::object& body, unsigned int& status, boost::json::value& response)
 	{
 		if (!ConnectIfNeeded())
 			return false;
@@ -89,7 +89,7 @@ namespace Strava
 
 			req.target(pathAndQuery.str());
 		}
-		else if (reqType == http::verb::post || reqType == http::verb::put)
+		else
 		{
 			req.target(path);
 
@@ -113,7 +113,7 @@ namespace Strava
 
 		status = res.result_int();
 
-		auto contentType = NetworkWrapper::GetContentType(res);
+		auto contentType = ClientNetworkWrapper::GetContentType(res);
 		if (contentType.size() == 0 || contentType != "application/json")
 			return false;
 
@@ -124,7 +124,7 @@ namespace Strava
 		return true;
 	}
 
-	bool NetworkWrapper::ConnectIfNeeded()
+	bool ClientNetworkWrapper::ConnectIfNeeded()
 	{
 		if (!m_initialized)
 			return false;
@@ -163,7 +163,7 @@ namespace Strava
 		return true;
 	}
 
-	bool NetworkWrapper::DisconnectIfNeeded()
+	bool ClientNetworkWrapper::DisconnectIfNeeded()
 	{
 		if (!m_initialized)
 			return false;
@@ -198,13 +198,13 @@ namespace Strava
 		return true;
 	}
 
-	void NetworkWrapper::BootstrapRequest(http::request<http::string_body>& request)
+	void ClientNetworkWrapper::BootstrapRequest(http::request<http::string_body>& request)
 	{
 		request.set(http::field::host, m_host);
 		request.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 	}
 
-	boost::beast::string_view NetworkWrapper::GetContentType(const http::response<http::string_body>& response)
+	boost::beast::string_view ClientNetworkWrapper::GetContentType(const http::response<http::string_body>& response)
 	{
 		auto contentTypeIter = response.find(http::field::content_type);
 
