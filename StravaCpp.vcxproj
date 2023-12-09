@@ -27,6 +27,7 @@
     <ClCompile Include="BaseEndpoint.cpp" />
     <ClCompile Include="ClientNetworkWrapper.cpp" />
     <ClCompile Include="ResultSet.cpp" />
+    <ClCompile Include="ServerNetworkParametersBundle.cpp" />
     <ClCompile Include="ServerNetworkWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -36,8 +37,10 @@
     <ClInclude Include="include\APIInterfaces.h" />
     <ClInclude Include="include\AuthenticatedAPIAccessor.h" />
     <ClInclude Include="include\AuthenticatedAthlete.h" />
-    <ClInclude Include="include\impl\BaseEndpoint.h" />
+    <ClInclude Include="include\BaseEndpoint.h" />
     <ClInclude Include="include\impl\ClientNetworkWrapper.h" />
+    <ClInclude Include="include\impl\Helpers.h" />
+    <ClInclude Include="include\impl\ServerNetworkParametersBundle.h" />
     <ClInclude Include="include\impl\ServerNetworkWrapper.h" />
     <ClInclude Include="include\ResultSet.h" />
   </ItemGroup>

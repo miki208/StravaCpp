@@ -30,7 +30,7 @@ namespace Strava
 			return *result;
 	}
 
-	bool ResultSet::ForEach(const std::string& path, const std::function<void(const json::value&)>& callback) const
+	bool ResultSet::ForEach(const std::string& path, const OnValueCallback& callback) const
 	{
 		const auto& result = Get(path);
 
@@ -56,7 +56,7 @@ namespace Strava
 	{
 		os << "Status: " << rs.m_status << std::endl;
 
-		if (rs.m_jsonResult != ResultSet::s_cNullValue)
+		if (!rs.m_jsonResult.is_null())
 			os << "Response: " << std::endl << rs.m_jsonResult;
 
 		return os;

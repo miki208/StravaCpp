@@ -12,11 +12,14 @@ namespace Strava
 	class ResultSet
 	{
 	public:
+		using OnValueCallback = std::function<void(const json::value&)>;
+
+	public:
 		ResultSet(const json::value& obj, unsigned int status);
 		ResultSet(json::value&& obj, unsigned int status);
 
 		const json::value& Get(const std::string& path) const;
-		bool ForEach(const std::string& path, const std::function<void(const json::value&)>& callback) const;
+		bool ForEach(const std::string& path, const OnValueCallback& callback) const;
 
 		unsigned int GetStatus() const;
 

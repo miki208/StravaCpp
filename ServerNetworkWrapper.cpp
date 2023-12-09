@@ -119,7 +119,7 @@ namespace Strava
 
 			m_initialized = true;
 
-			return  boost::system::errc::make_error_code(boost::system::errc::success);
+			return boost::system::errc::make_error_code(boost::system::errc::success);
 		}
 
 		std::pair<error_code, std::string> ServerNetworkWrapper::Start(const std::string& interface, uint16_t port)

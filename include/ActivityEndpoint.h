@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AuthenticatedAthlete.h"
-#include "impl/BaseEndpoint.h"
+#include "BaseEndpoint.h"
 #include "ResultSet.h"
 
 #include <memory>
@@ -64,7 +64,7 @@ namespace Strava
 		ResultSet Zones(uint64_t id);
 
 	private:
-		ActivityEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete, const std::function<void(const AuthenticatedAthlete&)>& onAuthenticatedAthleteUpdatedCb);
+		ActivityEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete, const OnAuthenticatedAthleteUpdated& onAuthenticatedAthleteUpdatedCb);
 
 	private:
 		friend class AuthenticatedAPIAccessor;

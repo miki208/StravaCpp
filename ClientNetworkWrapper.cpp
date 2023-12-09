@@ -1,5 +1,7 @@
 #include "impl/ClientNetworkWrapper.h"
 
+#include "impl/Helpers.h"
+
 #include "boost/beast/version.hpp"
 #include "boost/certify/extensions.hpp"
 #include "boost/certify/https_verification.hpp"
@@ -93,9 +95,10 @@ namespace Strava
 		{
 			req.target(path);
 
-			req.body() = json::serialize(body);
+			if (!HttpHelper::SetBodyFromJson(body, req))
+				return false;
 		}
-
+		
 		BootstrapRequest(req);
 
 		//--- set header
@@ -113,12 +116,7 @@ namespace Strava
 
 		status = res.result_int();
 
-		auto contentType = ClientNetworkWrapper::GetContentType(res);
-		if (contentType.size() == 0 || contentType != "application/json")
-			return false;
-
-		response = boost::json::parse(res.body(), ec);
-		if (ec)
+		if (!HttpHelper::GetJsonFromBody(res, response))
 			return false;
 
 		return true;
@@ -202,21 +200,5 @@ namespace Strava
 	{
 		request.set(http::field::host, m_host);
 		request.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
-	}
-
-	boost::beast::string_view ClientNetworkWrapper::GetContentType(const http::response<http::string_body>& response)
-	{
-		auto contentTypeIter = response.find(http::field::content_type);
-
-		if (contentTypeIter == response.cend())
-			return boost::beast::string_view();
-
-		auto delimiterPos = contentTypeIter->value().find(';');
-		if (delimiterPos == boost::beast::string_view::npos)
-			return contentTypeIter->value();
-
-		const auto contentType = contentTypeIter->value();
-
-		return contentType.substr(0, delimiterPos);
 	}
 }

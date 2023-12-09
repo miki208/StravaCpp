@@ -11,7 +11,7 @@ namespace Strava
 
 	}
 
-	void AuthenticatedAPIAccessor::SetOnAuthenticatedAthleteUpdatedCallback(const std::function<void(const AuthenticatedAthlete&)>& cb)
+	void AuthenticatedAPIAccessor::SetOnAuthenticatedAthleteUpdatedCallback(const BaseEndpoint::OnAuthenticatedAthleteUpdated& cb)
 	{
 		m_onAuthenticatedAthleteUpdatedCb = cb;
 	}

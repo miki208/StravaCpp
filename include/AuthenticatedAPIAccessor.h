@@ -3,7 +3,7 @@
 #include "ActivityEndpoint.h"
 #include "AuthenticatedAthlete.h"
 
-#include <functional>
+#include <memory>
 
 namespace Strava
 {
@@ -14,7 +14,7 @@ namespace Strava
 	public:
 		AuthenticatedAPIAccessor(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete);
 
-		void SetOnAuthenticatedAthleteUpdatedCallback(const std::function<void(const AuthenticatedAthlete&)>& cb);
+		void SetOnAuthenticatedAthleteUpdatedCallback(const BaseEndpoint::OnAuthenticatedAthleteUpdated& cb);
 
 		ActivityEndpoint Activity();
 
@@ -22,6 +22,6 @@ namespace Strava
 		std::shared_ptr<IAPIInternalInterface> m_pApiInternal;
 
 		AuthenticatedAthlete m_athlete;
-		std::function<void(const AuthenticatedAthlete&)> m_onAuthenticatedAthleteUpdatedCb;
+		BaseEndpoint::OnAuthenticatedAthleteUpdated m_onAuthenticatedAthleteUpdatedCb;
 	};
 }

@@ -1,4 +1,4 @@
-#include "impl/BaseEndpoint.h"
+#include "BaseEndpoint.h"
 
 #include "APIInterfaces.h"
 #include "impl/ClientNetworkWrapper.h"
@@ -7,7 +7,7 @@
 
 namespace Strava
 {
-	BaseEndpoint::BaseEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete, const std::function<void(const AuthenticatedAthlete&)>& m_onAuthenticatedAthleteUpdatedCb) :
+	BaseEndpoint::BaseEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete, const OnAuthenticatedAthleteUpdated& m_onAuthenticatedAthleteUpdatedCb) :
 		m_pApiInternal(pApiInternal),
 		m_athlete(athlete),
 		m_onAuthenticatedAthleteUpdatedCb(m_onAuthenticatedAthleteUpdatedCb)
@@ -16,22 +16,22 @@ namespace Strava
 
 	ResultSet BaseEndpoint::SendGetRequest(const std::string& endpoint, std::vector<std::pair<http::field, std::string>> header, json::object query, bool authenticatedRequest)
 	{
-		return SendCommon(http::verb::get, endpoint, header, query, authenticatedRequest);
+		return SendCommon(http::verb::get, endpoint, std::move(header), std::move(query), authenticatedRequest);
 	}
 
 	ResultSet BaseEndpoint::SendPostRequest(const std::string& endpoint, std::vector<std::pair<http::field, std::string>> header, json::object body, bool authenticatedRequest)
 	{
-		return SendCommon(http::verb::post, endpoint, header, body, authenticatedRequest);
+		return SendCommon(http::verb::post, endpoint, std::move(header), std::move(body), authenticatedRequest);
 	}
 
 	ResultSet BaseEndpoint::SendPutRequest(const std::string& endpoint, std::vector<std::pair<http::field, std::string>> header, json::object body, bool authenticatedRequest)
 	{
-		return SendCommon(http::verb::put, endpoint, header, body, authenticatedRequest);
+		return SendCommon(http::verb::put, endpoint, std::move(header), std::move(body), authenticatedRequest);
 	}
 
 	ResultSet BaseEndpoint::SendCommon(http::verb verb, const std::string& endpoint, std::vector<std::pair<http::field, std::string>> header, json::object params, bool authenticatedRequest)
 	{
-		if (!m_pApiInternal->IsInitialized())
+		if (!m_pApiInternal->_IsInitialized())
 			return ResultSet(boost::json::value(), static_cast<unsigned int>(http::status::failed_dependency));
 
 		if (authenticatedRequest)
@@ -42,12 +42,12 @@ namespace Strava
 			{
 				//--- refresh access token
 
-				json::object refreshRequestParams;
-
-				refreshRequestParams["client_id"] = m_pApiInternal->GetClientId();
-				refreshRequestParams["client_secret"] = m_pApiInternal->GetClientSecret();
-				refreshRequestParams["grant_type"] = "refresh_token";
-				refreshRequestParams["refresh_token"] = m_athlete.refresh_token();
+				json::object refreshRequestParams = {
+					{"client_id", m_pApiInternal->_GetClientId()},
+					{"client_secret", m_pApiInternal->_GetClientSecret()},
+					{"grant_type", "refresh_token"},
+					{"refresh_token", m_athlete.refresh_token()}
+				};
 
 				auto refreshResponse = SendPostRequest("/oauth/token", {}, refreshRequestParams, false);
 
@@ -60,7 +60,7 @@ namespace Strava
 					if(!access_token.is_string() || !expires_at.is_number() || !refresh_token.is_string())
 						return ResultSet(boost::json::value(), static_cast<unsigned int>(http::status::unauthorized));
 
-					m_athlete = AuthenticatedAthlete(std::string(access_token.get_string()), expires_at.to_number<int>(), std::string(refresh_token.get_string()));
+					m_athlete = AuthenticatedAthlete(std::string(access_token.get_string()), expires_at.to_number<int64_t>(), std::string(refresh_token.get_string()));
 
 					if (m_onAuthenticatedAthleteUpdatedCb)
 						m_onAuthenticatedAthleteUpdatedCb(m_athlete);
@@ -77,9 +77,9 @@ namespace Strava
 		unsigned int status;
 		json::value response;
 
-		m_pApiInternal->GetClientNetworkWrapper().SendRequest(
+		m_pApiInternal->_GetClientNetworkWrapper().SendRequest(
 			verb,
-			m_pApiInternal->GetRootEndpoint() + endpoint,
+			m_pApiInternal->_GetRootEndpoint() + endpoint,
 			header,
 			params,
 			status,

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "APIInterfaces.h"
-#include "AuthenticatedAthlete.h"
 
 #include "boost/noncopyable.hpp"
 
+#include <cstdint>
 #include <memory>
 #include <string>
 
@@ -20,40 +20,37 @@ namespace Strava
 	public:
 		~API();
 
+		bool Initialize() override;
 		bool IsInitialized() const override;
 
 		AuthenticatedAPIAccessor GetApiAccessor(const AuthenticatedAthlete& athlete) override;
 
-		std::string GetApiHostName() const override;
-		std::string GetRootEndpoint() const override;
+		bool _IsInitialized() const override;
 
-		int GetClientId() const override;
-		std::string GetClientSecret() const override;
+		std::string _GetApiHostName() const override;
+		std::string _GetRootEndpoint() const override;
 
-		ClientNetworkWrapper& GetClientNetworkWrapper() override;
+		int32_t _GetClientId() const override;
+		std::string _GetClientSecret() const override;
+
+		ClientNetworkWrapper& _GetClientNetworkWrapper() override;
 
 	private:
-		API(int clientId, const std::string& clientSecret, std::string serverInterface = "", uint16_t serverPort = 0, std::string certFile = "", std::string pkFile = "", std::string pkPasshphrase = "");
-
-		bool Initialize();
+		API(int32_t clientId, const std::string& clientSecret, std::shared_ptr<Async::IServerNetworkParametersBundleSetter> pSrvNetParamBundle = nullptr);
 
 	private:
 		const std::string cStravaHostName;
 		const std::string cRootEndpoint;
 
-		const int m_clientId;
+		const int32_t m_clientId;
 		const std::string m_clientSecret;
 
 		bool m_initialized;
 
 		std::unique_ptr<ClientNetworkWrapper> m_pClientNetworkWrapper;
-		std::unique_ptr<Async::ServerNetworkWrapper> m_pServerNetworkWrapper;
 
-		std::string m_serverInterface;
-		uint16_t m_serverPort;
-		std::string m_certFile;
-		std::string m_pkFile;
-		std::string m_pkPassphrase;
+		std::unique_ptr<Async::ServerNetworkWrapper> m_pServerNetworkWrapper;
+		std::shared_ptr<Async::IServerNetworkParametersBundleGetter> m_pSrvNetParamBundle;
 
 	private:
 		friend class APIFactory;

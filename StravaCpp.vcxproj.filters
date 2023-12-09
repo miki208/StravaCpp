@@ -45,6 +45,9 @@
     <ClCompile Include="ServerNetworkWrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ServerNetworkParametersBundle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ActivityEndpoint.h">
@@ -68,14 +71,20 @@
     <ClInclude Include="include\AuthenticatedAPIAccessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\impl\BaseEndpoint.h">
-      <Filter>Header Files\impl</Filter>
-    </ClInclude>
     <ClInclude Include="include\impl\ClientNetworkWrapper.h">
       <Filter>Header Files\impl</Filter>
     </ClInclude>
     <ClInclude Include="include\impl\ServerNetworkWrapper.h">
       <Filter>Header Files\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\impl\Helpers.h">
+      <Filter>Header Files\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\impl\ServerNetworkParametersBundle.h">
+      <Filter>Header Files\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BaseEndpoint.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

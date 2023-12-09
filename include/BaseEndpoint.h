@@ -23,8 +23,11 @@ namespace Strava
 
 	class BaseEndpoint
 	{
+	public:
+		using OnAuthenticatedAthleteUpdated = std::function<void(const AuthenticatedAthlete&)>;
+
 	protected:
-		BaseEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete, const std::function<void(const AuthenticatedAthlete&)>& onAuthenticatedAthleteUpdatedCb);
+		BaseEndpoint(std::shared_ptr<IAPIInternalInterface> pApiInternal, const AuthenticatedAthlete& athlete, const OnAuthenticatedAthleteUpdated& onAuthenticatedAthleteUpdatedCb);
 
 		ResultSet SendGetRequest(const std::string& endpoint, std::vector<std::pair<http::field, std::string>> header, json::object query, bool authenticatedRequest = true);
 		ResultSet SendPostRequest(const std::string& endpoint, std::vector<std::pair<http::field, std::string>> header, json::object body, bool authenticatedRequest = true);
@@ -37,6 +40,6 @@ namespace Strava
 		std::shared_ptr<IAPIInternalInterface> m_pApiInternal;
 
 		AuthenticatedAthlete m_athlete;
-		std::function<void(const AuthenticatedAthlete&)> m_onAuthenticatedAthleteUpdatedCb;
+		OnAuthenticatedAthleteUpdated m_onAuthenticatedAthleteUpdatedCb;
 	};
 }

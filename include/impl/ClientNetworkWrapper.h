@@ -11,11 +11,12 @@
 #include "boost/beast/http.hpp"
 #include "boost/beast/ssl.hpp"
 
+namespace json = boost::json;
+
 namespace beast = boost::beast;
 namespace http = beast::http;
 namespace net = boost::asio;
 namespace ssl = net::ssl;
-namespace json = boost::json;
 
 using tcp = net::ip::tcp;
 using error_code = boost::system::error_code;
@@ -40,8 +41,6 @@ namespace Strava
 		bool DisconnectIfNeeded();
 
 		void BootstrapRequest(http::request<http::string_body>& request);
-
-		static boost::beast::string_view GetContentType(const http::response<http::string_body>& response);
 
 	private:
 		bool m_initialized;
