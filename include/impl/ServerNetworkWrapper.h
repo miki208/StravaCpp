@@ -61,7 +61,7 @@ namespace Strava
 
 			error_code Initialize(const std::string& certificateFile, const std::string& pkFile, const std::string& pkPassphrase, const OnStoppedListening& onStoppedListeningCb, const HttpsSession::OnSessionStart& onSessionStartCb, const HttpsSession::OnSessionEnd& onSessionEndCb, const HttpsSession::OnRequest& onRequestCb);
 
-			std::pair<error_code, std::string> Start(const std::string& interface, uint16_t port);
+			std::pair<error_code, std::string> Start(const std::string& hostname, uint16_t port);
 			bool Stop();
 
 		private:

@@ -2,14 +2,18 @@
 
 #include "AuthenticatedAPIAccessor.h"
 #include "AuthenticatedAthlete.h"
+#include "AuthorizationEndpoint.h"
+#include "SubscriptionEndpoint.h"
 
 #include "boost/json.hpp"
 #include "boost/beast/http/status.hpp"
+#include "boost/beast/http/verb.hpp"
 
 #include <cstdint>
 #include <functional>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace beast = boost::beast;
 namespace http = beast::http;
@@ -27,6 +31,8 @@ namespace Strava
 		virtual bool IsInitialized() const = 0;
 
 		virtual AuthenticatedAPIAccessor GetApiAccessor(const AuthenticatedAthlete& athlete) = 0;
+		virtual SubscriptionEndpoint& GetSubscriptionEndpoint() = 0;
+		virtual AuthorizationEndpoint& GetAuthorizationEndpoint() = 0;
 	};
 
 	class ClientNetworkWrapper;
@@ -42,18 +48,20 @@ namespace Strava
 		virtual int32_t _GetClientId() const = 0;
 		virtual std::string _GetClientSecret() const = 0;
 
+		virtual std::string _GetServerHostname() const = 0;
+
 		virtual ClientNetworkWrapper& _GetClientNetworkWrapper() = 0;
 	};
 
 	namespace Async
 	{
-		using RequestFilter = std::function<bool(const std::vector<std::string>& target)>;
-		using RequestHandler = std::function<bool(const std::vector<std::string>& target, const json::object& query, const json::value& reqBody, http::status& respStatus, json::value& respBody)>;
+		using RequestFilter = std::function<bool(http::verb method, const std::vector<std::string>& target)>;
+		using RequestHandler = std::function<bool(http::verb method, const std::vector<std::string>& target, const json::object& query, const json::value& reqBody, http::status& respStatus, json::value& respBody)>;
 
 		class IServerNetworkParametersBundleGetter
 		{
 		public:
-			virtual std::string GetServerInterface() const = 0;
+			virtual std::string GetServerHostname() const = 0;
 			virtual uint16_t GetServerPort() const = 0;
 			
 			virtual std::string GetCertFile() const = 0;
@@ -62,14 +70,16 @@ namespace Strava
 
 			virtual std::string GetTokenExchangeTarget() const = 0;
 			virtual std::string GetSubscriptionTarget() const = 0;
+			virtual SubscriptionEndpoint::OnSubscriptionEvent GetSubscriptionCallback() const = 0;
 
 			virtual std::vector<std::pair<RequestFilter, RequestHandler>>& GetRequestHandlers() = 0;
 		};
 
+
 		class IServerNetworkParametersBundleSetter
 		{
 		public:
-			virtual void SetTokenExchangeTarget(const std::string& tokenExchangeTarget) = 0;
+			virtual void SetTokenExchangeTarget(const std::string& tokenExchangeTarget, const SubscriptionEndpoint::OnSubscriptionEvent& onSubscriptionEventCb) = 0;
 			virtual void SetSubscriptionTarget(const std::string& subscriptionTarget) = 0;
 
 			virtual void AddCustomRequestHandler(const RequestFilter& reqFilter, const RequestHandler& reqHandler) = 0;

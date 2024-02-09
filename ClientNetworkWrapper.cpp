@@ -61,7 +61,7 @@ namespace Strava
 		req.version(11);
 		req.method(reqType);
 
-		if (reqType == http::verb::get)
+		if (reqType == http::verb::get || reqType == http::verb::delete_)
 		{
 			std::stringstream pathAndQuery;
 			pathAndQuery << path;

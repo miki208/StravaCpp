@@ -49,7 +49,7 @@ namespace Strava
 					{"refresh_token", m_athlete.refresh_token()}
 				};
 
-				auto refreshResponse = SendPostRequest("/oauth/token", {}, refreshRequestParams, false);
+				auto refreshResponse = SendPostRequest(AuthorizationEndpoint::GetTokenExchangeEndpoint(), {}, refreshRequestParams, false);
 
 				if (static_cast<http::status>(refreshResponse.GetStatus()) == http::status::ok)
 				{
@@ -77,7 +77,7 @@ namespace Strava
 		unsigned int status;
 		json::value response;
 
-		m_pApiInternal->_GetClientNetworkWrapper().SendRequest(
+		bool success = m_pApiInternal->_GetClientNetworkWrapper().SendRequest(
 			verb,
 			m_pApiInternal->_GetRootEndpoint() + endpoint,
 			header,
@@ -85,6 +85,9 @@ namespace Strava
 			status,
 			response
 		);
+
+		if (!success)
+			return ResultSet(boost::json::value(), static_cast<unsigned int>(http::status::service_unavailable));
 
 		return ResultSet(std::move(response), status);
 	}

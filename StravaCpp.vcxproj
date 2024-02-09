@@ -24,11 +24,13 @@
     <ClCompile Include="APIFactory.cpp" />
     <ClCompile Include="AuthenticatedAPIAccessor.cpp" />
     <ClCompile Include="AuthenticatedAthlete.cpp" />
+    <ClCompile Include="AuthorizationEndpoint.cpp" />
     <ClCompile Include="BaseEndpoint.cpp" />
     <ClCompile Include="ClientNetworkWrapper.cpp" />
     <ClCompile Include="ResultSet.cpp" />
     <ClCompile Include="ServerNetworkParametersBundle.cpp" />
     <ClCompile Include="ServerNetworkWrapper.cpp" />
+    <ClCompile Include="SubscriptionEndpoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ActivityEndpoint.h" />
@@ -37,12 +39,14 @@
     <ClInclude Include="include\APIInterfaces.h" />
     <ClInclude Include="include\AuthenticatedAPIAccessor.h" />
     <ClInclude Include="include\AuthenticatedAthlete.h" />
+    <ClInclude Include="include\AuthorizationEndpoint.h" />
     <ClInclude Include="include\BaseEndpoint.h" />
     <ClInclude Include="include\impl\ClientNetworkWrapper.h" />
     <ClInclude Include="include\impl\Helpers.h" />
     <ClInclude Include="include\impl\ServerNetworkParametersBundle.h" />
     <ClInclude Include="include\impl\ServerNetworkWrapper.h" />
     <ClInclude Include="include\ResultSet.h" />
+    <ClInclude Include="include\SubscriptionEndpoint.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

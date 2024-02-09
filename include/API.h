@@ -24,6 +24,8 @@ namespace Strava
 		bool IsInitialized() const override;
 
 		AuthenticatedAPIAccessor GetApiAccessor(const AuthenticatedAthlete& athlete) override;
+		SubscriptionEndpoint& GetSubscriptionEndpoint() override;
+		AuthorizationEndpoint& GetAuthorizationEndpoint() override;
 
 		bool _IsInitialized() const override;
 
@@ -33,10 +35,17 @@ namespace Strava
 		int32_t _GetClientId() const override;
 		std::string _GetClientSecret() const override;
 
+		std::string _GetServerHostname() const override;
+
 		ClientNetworkWrapper& _GetClientNetworkWrapper() override;
 
 	private:
 		API(int32_t clientId, const std::string& clientSecret, std::shared_ptr<Async::IServerNetworkParametersBundleSetter> pSrvNetParamBundle = nullptr);
+
+		bool SubscriptionRequestFilter(http::verb method, const std::vector<std::string>& target);
+		bool SubscriptionRequestHandler(http::verb method, const std::vector<std::string>& target, const json::object& query, const json::value& reqBody, http::status& respStatus, json::value& respBody);
+		bool TokenExchangeRequestFilter(http::verb method, const std::vector<std::string>& target);
+		bool TokenExchangeRequestHandler(http::verb method, const std::vector<std::string>& target, const json::object& query, const json::value& reqBody, http::status& respStatus, json::value& respBody);
 
 	private:
 		const std::string cStravaHostName;
@@ -51,6 +60,9 @@ namespace Strava
 
 		std::unique_ptr<Async::ServerNetworkWrapper> m_pServerNetworkWrapper;
 		std::shared_ptr<Async::IServerNetworkParametersBundleGetter> m_pSrvNetParamBundle;
+
+		AuthorizationEndpoint m_authorizationEndpoint;
+		SubscriptionEndpoint m_subscriptionEndpoint;
 
 	private:
 		friend class APIFactory;

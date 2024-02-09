@@ -48,6 +48,12 @@
     <ClCompile Include="ServerNetworkParametersBundle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SubscriptionEndpoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AuthorizationEndpoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ActivityEndpoint.h">
@@ -84,6 +90,12 @@
       <Filter>Header Files\impl</Filter>
     </ClInclude>
     <ClInclude Include="include\BaseEndpoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SubscriptionEndpoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AuthorizationEndpoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

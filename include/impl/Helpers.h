@@ -5,6 +5,8 @@
 #include "boost/beast/http.hpp"
 #include "boost/json.hpp"
 
+#include <numeric>
+
 namespace beast = boost::beast;
 namespace http = beast::http;
 namespace json = boost::json;
@@ -36,19 +38,15 @@ namespace Strava
 		template<bool isRequest>
 		static bool GetJsonFromBody(const http::message<isRequest, http::string_body>& msg, json::value& result)
 		{
-			error_code ec;
-
 			auto contentType = HttpHelper::GetContentType(msg);
-			if (contentType.size() == 0 || contentType != "application/json")
-				return false;
-
-			if (msg.body().empty())
+			if (contentType.size() == 0 || contentType != "application/json" || msg.body().empty())
 			{
 				result = json::value();
 
 				return true;
 			}
 
+			error_code ec;
 			result = json::parse(msg.body(), ec);
 
 			if (ec)
@@ -96,6 +94,15 @@ namespace Strava
 			}
 
 			return true;
+		}
+
+		static std::string JoinTarget(const std::vector<std::string>& target)
+		{
+			return std::accumulate(target.begin(), target.end(), std::string(), [](const std::string& acc, const std::string& str) -> std::string
+				{
+					return acc + (acc.empty() ? "" : "/") + str;
+				}
+			);
 		}
 	};
 }

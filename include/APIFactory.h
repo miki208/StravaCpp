@@ -25,13 +25,13 @@ namespace Strava
 		
 		/*
 		* @brief Create a bundle of network parameters for configuring the web server used to receive client authorization codes and webhook subscription updates, as well as to handle other custom requests. This is optional.
-		* @param serverInterface - network interface where the web server is bound.
+		* @param serverHostname - network interface where the web server is bound.
 		* @param serverPort - network port where the web server is listening.
 		* @param certFile - certification file which contains the server's certificate, and certificate chain, used for TLS.
 		* @param pkFile - private key file for the server's certificate, also used for TLS.
 		* @param pkPassphrase - password used to encrypt private key (if encrypted, empty string otherwise).
 		* @returns a shared resource to the bundle configured with required info; additionally, token exchange and subscription targets can be set, as well as custom handlers.
 		*/
-		static std::shared_ptr<Async::IServerNetworkParametersBundleSetter> CreateServerNetworkParametersBundle(const std::string& serverInterface, uint16_t serverPort, const std::string& certFile, const std::string& pkFile, const std::string& pkPassphrase);
+		static std::shared_ptr<Async::IServerNetworkParametersBundleSetter> CreateServerNetworkParametersBundle(const std::string& serverHostname, uint16_t serverPort, const std::string& certFile, const std::string& pkFile, const std::string& pkPassphrase);
 	};
 }

@@ -6,14 +6,14 @@ namespace Strava
 {
 	namespace Async
 	{
-		ServerNetworkParametersBundle::ServerNetworkParametersBundle(const std::string& serverInterface, uint16_t serverPort, const std::string& certFile, const std::string& pkFile, const std::string& pkPassphrase) :
-			m_serverInterface(serverInterface), m_serverPort(serverPort), m_certFile(certFile), m_pkFile(pkFile), m_pkPassphrase(pkPassphrase)
+		ServerNetworkParametersBundle::ServerNetworkParametersBundle(const std::string& serverHostname, uint16_t serverPort, const std::string& certFile, const std::string& pkFile, const std::string& pkPassphrase) :
+			m_serverHostname(serverHostname), m_serverPort(serverPort), m_certFile(certFile), m_pkFile(pkFile), m_pkPassphrase(pkPassphrase)
 		{
 		}
 
-		std::string ServerNetworkParametersBundle::GetServerInterface() const
+		std::string ServerNetworkParametersBundle::GetServerHostname() const
 		{
-			return m_serverInterface;
+			return m_serverHostname;
 		}
 
 		uint16_t ServerNetworkParametersBundle::GetServerPort() const
@@ -36,7 +36,7 @@ namespace Strava
 			return m_pkPassphrase;
 		}
 
-		void ServerNetworkParametersBundle::SetTokenExchangeTarget(const std::string& tokenExchangeTarget)
+		void ServerNetworkParametersBundle::SetTokenExchangeTarget(const std::string& tokenExchangeTarget, const SubscriptionEndpoint::OnSubscriptionEvent& onSubscriptionEventCb)
 		{
 			m_tokenExchangeTarget = tokenExchangeTarget;
 		}
@@ -54,6 +54,11 @@ namespace Strava
 		std::string ServerNetworkParametersBundle::GetSubscriptionTarget() const
 		{
 			return m_subscriptionTarget;
+		}
+
+		SubscriptionEndpoint::OnSubscriptionEvent ServerNetworkParametersBundle::GetSubscriptionCallback() const
+		{
+			return m_onSubscriptionEventCb;
 		}
 
 		void ServerNetworkParametersBundle::AddCustomRequestHandler(const RequestFilter& reqFilter, const RequestHandler& reqHandler)

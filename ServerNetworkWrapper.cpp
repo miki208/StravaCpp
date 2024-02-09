@@ -122,7 +122,7 @@ namespace Strava
 			return boost::system::errc::make_error_code(boost::system::errc::success);
 		}
 
-		std::pair<error_code, std::string> ServerNetworkWrapper::Start(const std::string& interface, uint16_t port)
+		std::pair<error_code, std::string> ServerNetworkWrapper::Start(const std::string& hostname, uint16_t port)
 		{
 			if (!m_initialized)
 				return { boost::system::errc::make_error_code(boost::system::errc::protocol_error), "Server network wrapper is not initialized." };
@@ -135,7 +135,18 @@ namespace Strava
 
 			error_code ec;
 
-			tcp::endpoint endpoint(net::ip::make_address(interface), port);
+			auto endpoint = tcp::endpoint(net::ip::make_address(hostname, ec), port);
+			if (ec)
+			{
+				tcp::resolver resolver(m_ioc);
+
+				auto endpoints = resolver.resolve(hostname, ec);
+
+				if (ec || endpoints.empty())
+					return { boost::system::errc::make_error_code(boost::system::errc::bad_address), "Provided hostname is not valid ip or hostname could not be resolved." };
+
+				endpoint = *endpoints.begin();
+			}
 
 			m_tcpAcceptor = tcp::acceptor(m_ioc);
 
